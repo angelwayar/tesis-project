@@ -67,7 +67,10 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(child: Image.asset("assets/images/tren.jpeg", fit: BoxFit.cover,)),
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Image.asset("assets/images/tren.jpeg", fit: BoxFit.cover,)),
         ProductsAndServices(),
         RegisterForm()
       ],

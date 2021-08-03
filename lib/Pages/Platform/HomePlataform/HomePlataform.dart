@@ -3,9 +3,8 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:plataforma_tesis/Pages/Platform/BottomBarNavigation/BottomBarNav.dart';
-import 'package:plataforma_tesis/Pages/Platform/menuLateral/menuLateral.dart';
 import 'package:plataforma_tesis/Pages/Platform/navbar/navbarPlataform.dart';
+import 'package:plataforma_tesis/services/requets.dart';
 
 class HomePlataform extends StatefulWidget {
   HomePlataform({Key? key}) : super(key: key);
@@ -20,6 +19,9 @@ class _HomePlataformState extends State<HomePlataform> {
   Uint8List? uploadFile;
   File? image;
   bool statemenu = false;
+  var send;
+  bool cargando = false;
+  bool bottombar = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,18 @@ class _HomePlataformState extends State<HomePlataform> {
                     child: Container(
                         height: MediaQuery.of(context).size.height * 0.7,
                         width: MediaQuery.of(context).size.width * 0.7,
-                        child: Image.memory(uploadFile!)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.memory(uploadFile!),
+                            SizedBox(
+                              width: 100.0,
+                            ),
+                            cargando
+                                ? Image.asset("assets/images/imagen2.PNG")
+                                : Container(),
+                          ],
+                        )),
                   )
                 : Positioned(
                     top: MediaQuery.of(context).size.height * 0.5,
@@ -78,6 +91,7 @@ class _HomePlataformState extends State<HomePlataform> {
                         if (result != null) {
                           setState(() {
                             subir = !subir;
+                            send = result!;
                             uploadFile = result!.files.single.bytes;
                           });
                         }
@@ -107,7 +121,7 @@ class _HomePlataformState extends State<HomePlataform> {
                             height: 80,
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: _cargandoimagen,
                             child: Text(
                               "Mejoramiento bajo factor climatologico",
                               style: TextStyle(fontSize: 24),
@@ -139,10 +153,46 @@ class _HomePlataformState extends State<HomePlataform> {
                 : Container(),
             Positioned(
                 top: MediaQuery.of(context).size.height * 0.92,
-                child: BottomBarNav(showButtons: false)),
+                child: Container(
+                  height: 80.0,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.black,
+                  child: bottombar
+                      ? Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  cargando = !cargando; 
+                                });
+                              },
+                              child: Text("Eliminar imagen mejorada",
+                                  style: TextStyle(
+                                      fontSize: 26.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xFFFFD600),
+                                minimumSize: Size(80.0, 80.0),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                )),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _cargandoimagen() async {
+    await mejorarImagen();
+    setState(() {
+      cargando = !cargando;
+      bottombar = !bottombar;
+      statemenu = !statemenu;
+    });
   }
 }

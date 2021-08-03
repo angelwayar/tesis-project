@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:plataforma_tesis/Pages/TipoPlan/TipoPlan.dart';
+import 'package:plataforma_tesis/Pages/Platform/HomePlataform/HomePlataform.dart';
+import 'package:plataforma_tesis/services/requets.dart';
 
 class LoginForm extends StatelessWidget {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
@@ -7,6 +10,8 @@ class LoginForm extends StatelessWidget {
     minimumSize: Size(191.0, 56.0),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
   );
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +31,7 @@ class LoginForm extends StatelessWidget {
               ),
               SizedBox(height: 51.0),
               TextFormField(
+                controller: emailController,
                 decoration: InputDecoration(
                   icon: Icon(Icons.email, color: Colors.white),
                   border: OutlineInputBorder(
@@ -44,6 +50,7 @@ class LoginForm extends StatelessWidget {
               ),
               SizedBox(height: 15.0),
               TextFormField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   icon: Icon(Icons.password, color: Colors.white),
@@ -66,10 +73,25 @@ class LoginForm extends StatelessWidget {
                 child: Text(
                   "Iniciar Sesión",
                   style: TextStyle(color: Colors.black),
-                  ),
+                ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PlanPage()));
+                  if ((emailController.text
+                              .compareTo("angelmanuelwayar@gmail.com") ==
+                          0) &&
+                      (passwordController.text.compareTo("123456") == 0)) {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePlataform()));
+                      }
+                  // try {
+                  // bool s = await login();
+
+                  // if (s) {
+                  // Navigator.push(context,
+                  //       MaterialPageRoute(builder: (context) => HomePlataform()));
+                  // }
+                  // } catch (e) {
+                  //   print("ERROR...!!!");
+                  // }
                 },
                 style: raisedButtonStyle,
               ),
@@ -83,5 +105,9 @@ class LoginForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0),
       ),
     );
+  }
+
+  Future<bool> login() async {
+    return await loginUser(emailController.text, passwordController.text);
   }
 }

@@ -86,7 +86,9 @@ class RegisterForm extends StatelessWidget {
                       "Registrar",
                       style: TextStyle(color: Colors.black),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      // Navigator.push(context, (_) => );
+                    },
                     style: raisedButtonStyle,
                   )
                 ],
